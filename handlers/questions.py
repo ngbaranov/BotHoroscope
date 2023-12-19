@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import CallbackQuery, Message
 
 
-from database.get_text_horoscope import get_text_horoscope
+from services.get_text_horoscope import get_text_horoscope
 from keyboards.keyboard_zodiac import get_zodiac_keyboard
 
 router:Router = Router()
