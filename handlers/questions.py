@@ -29,8 +29,8 @@ async def get_period(call: CallbackQuery):
     await call.answer()
     print(call)
     period = call.data
-    zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n'
-    zodiac_period = ''.join([key for key, value in LEXICON_ZODIAC_PERIOD.items() if value == period]) + '\n'
+    zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n\n'
+    zodiac_period = ''.join([key for key, value in LEXICON_ZODIAC_PERIOD.items() if value == period]) + '\n\n'
     text = await get_text_horoscope(zodiac=zodiac, period=period)
     await call.message.edit_text(text=zodiac_key + zodiac_period + text, reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
 
