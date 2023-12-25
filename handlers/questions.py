@@ -16,12 +16,26 @@ async def start_command(message: Message):
 
 
 @router.callback_query(F.data.in_(LEXICON_ZODIAC_SIGNS.values()))
-async def get_period(call: CallbackQuery):
-    await  call.answer()
+async def get_period_kb(call: CallbackQuery):
+    await call.answer()
     zodiac = call.data
     zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n'
     text = await get_text_horoscope(zodiac=zodiac)
     await call.message.edit_text(text=zodiac_key + text, reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
+
+
+@router.callback_query(F.data.in_(LEXICON_ZODIAC_PERIOD.values()))
+async def get_period(call: CallbackQuery):
+    await call.answer()
+    period = call.data
+    print(period)
+    # zodiac = call.parse_mode
+    # print(zodiac)
+    # zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n'
+    text = await get_text_horoscope(zodiac='leo', period=period)
+    await call.message.edit_text(text='leo' + text, reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
+
+
 
 
 @router.callback_query()
@@ -30,5 +44,4 @@ async def get_horoscope(call: CallbackQuery):
     zodiac = call.data
     zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n'
     text = await get_text_horoscope(zodiac=zodiac)
-    print(call.message.edit_text(text=zodiac_key + text, reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS), ))
     await call.message.edit_text(text=zodiac_key + text, reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS), )
