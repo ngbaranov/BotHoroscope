@@ -8,6 +8,7 @@ from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_ZODIAC_PERIOD
 
 router: Router = Router()
 
+
 @router.message(CommandStart())
 async def start_command(message: Message):
     await message.answer(text='Привет. Выбери свой знак зодиака:',
@@ -32,9 +33,13 @@ async def get_period(call: CallbackQuery):
     zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n\n'
     zodiac_period = ''.join([key for key, value in LEXICON_ZODIAC_PERIOD.items() if value == period]) + '\n\n'
     text = await get_text_horoscope(zodiac=zodiac, period=period)
-    await call.message.edit_text(text=zodiac_key + zodiac_period + text, reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
+    await call.message.edit_text(text=zodiac_key + zodiac_period + text,
+                                 reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
 
 
+@router.callback_query(F.data == 'start')
+async def start(call: CallbackQuery):
+    await call.message.edit_text(text='На какой знак желаете сменить:', reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
 
 
 @router.callback_query()
