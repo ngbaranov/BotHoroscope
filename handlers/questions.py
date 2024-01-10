@@ -39,12 +39,13 @@ async def get_period(call: CallbackQuery):
 
 @router.callback_query(F.data == 'start')
 async def start(call: CallbackQuery):
-    await call.message.edit_text(text='На какой знак желаете сменить:', reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
+    await call.message.edit_text(text='На какой знак желаете сменить:',
+                                 reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
 
 
 @router.callback_query()
 async def get_horoscope(call: CallbackQuery):
-    await  call.answer()
+    await call.answer()
     zodiac = call.data
     zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == zodiac]) + '\n'
     text = await get_text_horoscope(zodiac=zodiac)
