@@ -3,7 +3,7 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import load_config
-from handlers import questions
+from handlers import questions, handler_subscription
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ async def main():
     bot = Bot(token=config.tg_bot.token)
     dp = Dispatcher()
 
-    dp.include_router(questions.router)
+    dp.include_routers(questions.router, handler_subscription.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

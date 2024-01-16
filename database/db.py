@@ -1,26 +1,30 @@
-import sqlite3
+from sqlalchemy import create_engine, String, Integer
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
+
+engine = create_engine("sqlite:///users.db", echo=True)
 
 
-class Database:
-    def __init__(self, db_file):
-        self.conn = sqlite3.connect(db_file)
-        self.cursor = self.conn.cursor()
+class Base(DeclarativeBase):
+    pass
 
-    def create_table(self):
-        with self.conn:
-            self.cursor.execute("""CREATE TABLE IF NOT EXISTS user (
-                                id INTEGER PRIMARY KEY,
-                                user_id INTEGER,
-                                user_name TEXT,
-                                subscription TEXT                                 
-                                )""")
 
-    def user_exists(self, user_id):
-        with self.conn:
-            result = self.cursor.execute("SELECT * FROM user WHERE user_id = ?", (user_id,)).fetchmany(1)
-            return bool(len(result))
+class User(Base):
+    __tablename__ = "subscription"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_user: Mapped[int]
+    name: Mapped[str] = mapped_column(String(30))
+    zodiac: Mapped[str] = mapped_column(String(30))
 
-    def add_user(self, user_id, user_name, subscription=0):
-        with self.conn:
-            return self.cursor.execute("INSERT INTO user (user_id, user_name, subscription) VALUES (?, ?, ?)",
-                                       (user_id, user_name, subscription))
+
+Base.metadata.create_all(engine)
+
+
+def create_user_subscription(user_id: int, first_name: str, zodiac: str) -> None:
+    with Session(engine) as session:
+        users = User(
+            id_user=user_id,
+            name=first_name,
+            zodiac=zodiac
+        )
+        session.add(users)
+        session.commit()

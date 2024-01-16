@@ -5,12 +5,8 @@ from aiogram.types import CallbackQuery, Message
 from services.get_text_horoscope import get_text_horoscope
 from keyboards.keyboard_zodiac import get_zodiac_keyboard, kb_zodiac_period
 from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_ZODIAC_PERIOD
-from database.db import Database
-
 
 router: Router = Router()
-db = Database('user.db')
-
 
 
 @router.message(CommandStart())
@@ -21,10 +17,6 @@ async def start_command(message: Message):
 
 @router.callback_query(F.data.in_(LEXICON_ZODIAC_SIGNS.values()))
 async def get_period_kb(call: CallbackQuery):
-    print(call.from_user.first_name)
-    db.create_table()
-    if not db.user_exists(call.from_user.id):
-        db.add_user(call.from_user.id, call.from_user.first_name, call.data)
     await call.answer()
     global zodiac
     zodiac = call.data
