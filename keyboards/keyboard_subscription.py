@@ -1,5 +1,5 @@
-from aiogram.types import InlineKeyboardMarkup, BotCommand
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.types import InlineKeyboardMarkup, BotCommand, ReplyKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardMarkup
 from aiogram import Bot
 
 from lexicon.lexicon import LEXICON_ZODIAC_SIGNS
@@ -17,6 +17,11 @@ def get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS: dict) -> InlineKeyboardMarkup:
     keyboard_builder.adjust(3)
     return keyboard_builder.as_markup()
 
+def get_start_keyboard()->InlineKeyboardBuilder:
+    bt = InlineKeyboardButton(text='start', callback_data="/start")
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[bt]])
+    return keyboard.as_markup()
+
 
 # Функция для настройки кнопки Menu бота
 async def set_main_menu(bot: Bot) -> None:
@@ -27,6 +32,6 @@ async def set_main_menu(bot: Bot) -> None:
         BotCommand(
             command=command,
             description=description
-        ) for command, description in LEXICON_COMMANDS_RU.items()
+        ) for command, description in LEXICON_COMMANDS.items()
     ]
     await bot.set_my_commands(main_menu_commands)

@@ -19,6 +19,11 @@ class User(Base):
 Base.metadata.create_all(engine)
 
 
+def user_verification(user_id) -> None:
+    with Session(bind=engine) as session:
+        return session.query(User).filter(User.id_user == user_id).first()
+
+
 def create_user_subscription(user_id: int, first_name: str, zodiac: str) -> None:
     with Session(engine) as session:
         users = User(
