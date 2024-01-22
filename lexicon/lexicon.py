@@ -4,3 +4,5 @@ LEXICON_ZODIAC_SIGNS = {'Овен': 'aries', 'Телец': 'taurus', 'Близн
 
 LEXICON_ZODIAC_PERIOD: dict = {'Завтра': 'tomorrow', 'Неделя': 'week', 'Месяц': 'month', '2024': '2024'}
 
+LEXICON_COMMANDS: dict = {'/subscription': 'подписаться', '/unsubscribe': 'отписаться', '/help': 'помощь'}
+

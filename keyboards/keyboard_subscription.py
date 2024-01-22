@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, BotCommand, ReplyKeyboardMarkup,
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardMarkup
 from aiogram import Bot
 
-from lexicon.lexicon import LEXICON_ZODIAC_SIGNS
+from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_COMMANDS
 
 
 def get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS: dict) -> InlineKeyboardMarkup:
@@ -17,9 +17,10 @@ def get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS: dict) -> InlineKeyboardMarkup:
     keyboard_builder.adjust(3)
     return keyboard_builder.as_markup()
 
-def get_start_keyboard()->InlineKeyboardBuilder:
-    bt = InlineKeyboardButton(text='start', callback_data="/start")
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[[bt]])
+
+def get_start_keyboard():
+    keyboard = InlineKeyboardBuilder[[InlineKeyboardButton(text="Привет", callback_data='start')]]
+
     return keyboard.as_markup()
 
 

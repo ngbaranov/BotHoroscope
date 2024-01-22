@@ -15,10 +15,10 @@ async def get_subscription(message: Message):
         await message.answer(text='Вы уже подписались', reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
     else:
         await message.answer(text='Подпишитесь на рассылку, выбрав знак или откажитесь выбрав кнопку "Передумать".',
-                             reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
+                             reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS), )
 
 
-@router.callback_query(F.data.in_(LEXICON_ZODIAC_SIGNS.values()))
+@router.callback_query(F.data.in_(LEXICON_ZODIAC_SIGNS.values()), F.data.messages_thread_id == 1)
 async def get_period_kb(call: CallbackQuery):
     # Base.metadata.create_all(engine)
     # if not db.user_exists(call.from_user.id):
