@@ -6,3 +6,7 @@ LEXICON_ZODIAC_PERIOD: dict = {'Завтра': 'tomorrow', 'Неделя': 'week
 
 LEXICON_COMMANDS: dict = {'/subscription': 'подписаться', '/unsubscribe': 'отписаться', '/help': 'помощь'}
 
+LEXICON_ZODIAC_SUBSCRIPTIONS: dict = {'Овен': 'Aries', 'Телец': 'Taurus', 'Близнецы': 'Gemini', 'Рак': 'Cancer',
+                                      'Лев': 'Leo', 'Дева': 'Virgo', 'Весы': 'Libra', 'Скорпион': 'Scorpio',
+                                      'Стрелец': 'Sagittarius', 'Козерог': 'Capricorn', 'Водолей': 'Aquarius',
+                                      'Рыба': 'Pisces'}
