@@ -5,12 +5,8 @@ from aiogram import Bot, Dispatcher
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config_data.config import load_config
-from handlers import questions, handler_subscription
-from services.get_text_horoscope import get_text_horoscope
+from handlers import questions, handler_subscription, handler_unsubscribe
 from services.apsched import send_message_cron
-from database.newsletter import get_id
-
-from database.newsletter import User
 
 logger = logging.getLogger(__name__)
 
@@ -28,16 +24,13 @@ async def main():
     dp = Dispatcher()
 
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    scheduler.add_job(send_message_cron, 'cron', hour='21', minute='05', args=[bot])
+    scheduler.add_job(send_message_cron, 'cron', hour='09', minute='11', args=[bot])
     scheduler.start()
 
-    dp.include_routers(questions.router, handler_subscription.router)
+    dp.include_routers(questions.router, handler_subscription.router, handler_unsubscribe.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
-
-    # text = await get_text_horoscope('leo', period='today')
-    # await bot.send_message(chat_id=830117694, text=text)
 
 
 if __name__ == '__main__':

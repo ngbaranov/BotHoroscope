@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine, String, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
 from pathlib import Path
-data_folder = Path("/home/nikolai/PycharmProjects/BotHoroscope")
-filename  = data_folder / "database.db"
 
+data_folder = Path("/home/nicolai/PycharmProjects/BotHoroscope/")
+filename = data_folder / "database.db"
 
 print(filename)
 
@@ -21,7 +21,6 @@ class User(Base):
     name: Mapped[str]
     zodiac: Mapped[str]
 
-
     def __repr__(self):
         return f'<User(id={self.id_user}, name={self.name}, age={self.zodiac})>'
 
@@ -29,10 +28,15 @@ class User(Base):
 Base.metadata.create_all(engine)
 
 
-
 def user_verification(user_id) -> None:
     with Session(bind=engine) as session:
         return session.query(User).filter(User.id_user == user_id).first()
+
+
+def delete_user(user_id) -> None:
+    with Session(bind=engine) as session:
+        session.query(User).filter(User.id_user == user_id).delete()
+        session.commit()
 
 
 def create_user_subscription(user_id: int, first_name: str, zodiac: str) -> None:
