@@ -1,7 +1,13 @@
-from sqlalchemy import create_engine, String, Integer
+from sqlalchemy import create_engine, String, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
+from pathlib import Path
 
-engine = create_engine("sqlite:///users.db", echo=True)
+data_folder = Path("/home/nicolai/PycharmProjects/BotHoroscope/")
+filename = data_folder / "database.db"
+
+print(filename)
+
+engine = create_engine(f"sqlite:///{filename}", echo=True)
 
 
 class Base(DeclarativeBase):
@@ -9,11 +15,14 @@ class Base(DeclarativeBase):
 
 
 class User(Base):
-    __tablename__ = "subscription"
+    __tablename__ = 'users'
     id: Mapped[int] = mapped_column(primary_key=True)
     id_user: Mapped[int]
-    name: Mapped[str] = mapped_column(String(30))
-    zodiac: Mapped[str] = mapped_column(String(30))
+    name: Mapped[str]
+    zodiac: Mapped[str]
+
+    def __repr__(self):
+        return f'<User(id={self.id_user}, name={self.name}, age={self.zodiac})>'
 
 
 Base.metadata.create_all(engine)
@@ -22,6 +31,12 @@ Base.metadata.create_all(engine)
 def user_verification(user_id) -> None:
     with Session(bind=engine) as session:
         return session.query(User).filter(User.id_user == user_id).first()
+
+
+def delete_user(user_id) -> None:
+    with Session(bind=engine) as session:
+        session.query(User).filter(User.id_user == user_id).delete()
+        session.commit()
 
 
 def create_user_subscription(user_id: int, first_name: str, zodiac: str) -> None:
