@@ -11,6 +11,11 @@ headers = {
 
 
 async def get_response(link: str):
+    """
+    Получаем ответ от сервера с определенного адреса
+    :param link:
+    :return:
+    """
     async with httpx.AsyncClient(headers=headers, follow_redirects=True) as htx:
         result: httpx.Response = await htx.get(url=link)
         if result.status_code != 200:
@@ -20,6 +25,9 @@ async def get_response(link: str):
 
 
 async def get_text_horoscope(zodiac: str, period='today'):
+    """
+    Получаем текст гороскопа по определенному знаку зодиака и периоду
+    """
     link = f'https://horo.mail.ru/prediction/{zodiac}/{period}/'
     response_result = await get_response(link=link)
     beautifulsoup = BeautifulSoup(markup=response_result, features='lxml')

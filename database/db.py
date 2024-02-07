@@ -1,13 +1,8 @@
-from sqlalchemy import create_engine, String, select
+from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
-from pathlib import Path
 
-data_folder = Path("/home/nicolai/PycharmProjects/BotHoroscope/")
-filename = data_folder / "database.db"
 
-print(filename)
-
-engine = create_engine(f"sqlite:///{filename}", echo=True)
+engine = create_engine(f"sqlite:///./database.db", echo=True)
 
 
 class Base(DeclarativeBase):

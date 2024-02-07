@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from database.db import engine, User
+from database.db import engine
 
 
 def get_id(User):
@@ -8,7 +8,4 @@ def get_id(User):
         stmt = select(User.id_user, User.zodiac)
         return session.execute(stmt)
 
-# with Session(engine) as session:
-#     # stmt = select(User.id_user, User.name, User.zodiac)
-#     # for i, j, k in session.execute(stmt):
-#     #     print(i, j, k)
+

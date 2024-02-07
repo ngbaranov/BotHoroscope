@@ -10,5 +10,10 @@ router: Router = Router()
 
 @router.message(Command("unsubscribe"))
 async def get_unsubscribe(message: Message):
+    """
+    Отписка от рассылки
+    :param message:
+    :return:
+    """
     delete_user(message.from_user.id)
     await message.answer(text='Вы успешно отписались', reply_markup=get_start_keyboard())

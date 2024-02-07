@@ -1,8 +1,8 @@
-from aiogram.types import InlineKeyboardMarkup, BotCommand, ReplyKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup, BotCommand
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram import Bot
 
-from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_COMMANDS, LEXICON_ZODIAC_SUBSCRIPTIONS
+from lexicon.lexicon import LEXICON_COMMANDS
 
 
 def get_zodiac_subscription(LEXICON_ZODIAC_SUBSCRIPTIONS: dict) -> InlineKeyboardMarkup:
@@ -19,8 +19,12 @@ def get_zodiac_subscription(LEXICON_ZODIAC_SUBSCRIPTIONS: dict) -> InlineKeyboar
 
 
 def get_start_keyboard():
+    """
+    Переход к выбору знаков зодиака
+    :return:
+    """
     keyboard_builder = InlineKeyboardBuilder()
-    keyboard_builder.button(text="Start", callback_data='start')
+    keyboard_builder.button(text="Старт", callback_data='start')
 
     return keyboard_builder.as_markup()
 
