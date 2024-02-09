@@ -4,6 +4,9 @@ from environs import Env
 
 @dataclass
 class TgBot:
+    """
+    Загружаем токен бота через переменную окружения
+    """
     token: str
 
 
