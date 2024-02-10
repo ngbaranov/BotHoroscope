@@ -7,7 +7,7 @@ from aiogram.fsm.context import FSMContext
 
 from services.get_text_horoscope import get_text_horoscope
 from keyboards.keyboard_zodiac import get_zodiac_keyboard, kb_zodiac_period
-from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_ZODIAC_PERIOD
+from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_ZODIAC_PERIOD, START
 from fsm.fsm_hor import FSMHor
 
 router: Router = Router()
@@ -20,8 +20,7 @@ async def start_command(message: Message, state: FSMContext):
     """
     Обработка команды /start,вход в состояние FSMHor, переход к выбору знака зодиака
     """
-    await message.answer(text='Привет. Выбери свой знак зодиака:',
-                         reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
+    await message.answer(text=START,  reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
     await state.set_state(FSMHor.hor_sign)
 
 
