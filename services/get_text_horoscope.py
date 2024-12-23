@@ -34,3 +34,4 @@ async def get_text_horoscope(zodiac: str, period='today'):
     text = beautifulsoup.find(name='div', class_ = 'article__item article__item_alignment_left article__item_html')
     return text.text
 
+print(get_text_horoscope(zodiac='aries'))
