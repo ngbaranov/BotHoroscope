@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config_data.config import load_config
@@ -23,11 +24,11 @@ async def main():
     logger.info('Starting bot...')
     # Инициализация бота
     config = load_config()
-    bot = Bot(token=config.tg_bot.token)
+    bot = Bot(token=config.tg_bot.token, parse_mode=ParseMode.HTML)
     dp = Dispatcher()
     # Рассылка по расписанию
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    scheduler.add_job(send_message_cron, 'cron', hour='09', minute='00', args=[bot])
+    scheduler.add_job(send_message_cron, 'cron', hour='08', minute='00', args=[bot])
     scheduler.start()
     # Подключение роутеров
     dp.include_routers(questions.router, handler_subscription.router, handler_unsubscribe.router, hadler_help.router)

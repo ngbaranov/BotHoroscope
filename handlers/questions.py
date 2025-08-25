@@ -5,10 +5,11 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
-from services.get_text_horoscope import get_text_horoscope
+# from services.get_text_horoscope import get_text_horoscope
 from keyboards.keyboard_zodiac import get_zodiac_keyboard, kb_zodiac_period
 from lexicon.lexicon import LEXICON_ZODIAC_SIGNS, LEXICON_ZODIAC_PERIOD, START
 from fsm.fsm_hor import FSMHor
+from test.test import fetch_horoscope
 
 router: Router = Router()
 storage: MemoryStorage = MemoryStorage()
@@ -35,7 +36,7 @@ async def get_period_kb(call: CallbackQuery, state: FSMContext):
     await call.answer()
     await state.update_data(hor_sign = call.data)
     zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == call.data]) + '\n'
-    text = await get_text_horoscope(zodiac=call.data)
+    text = await fetch_horoscope(zodiac_en=call.data)
     await call.message.edit_text(text=zodiac_key + text, reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
     await state.set_state(FSMHor.hor_time)
 
@@ -54,7 +55,7 @@ async def get_period(call: CallbackQuery, state: FSMContext):
     zodiac_key = (''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == horoscope['hor_sign']]) +
                   '\n\n')
     zodiac_period = ''.join([key for key, value in LEXICON_ZODIAC_PERIOD.items() if value == call.data]) + '\n\n'
-    text = await get_text_horoscope(zodiac=horoscope['hor_sign'], period=call.data)
+    text = await fetch_horoscope(zodiac_en=horoscope['hor_sign'], period=call.data)
     await call.message.edit_text(text=zodiac_key + zodiac_period + text,
                                  reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
 

@@ -1,8 +1,9 @@
 from aiogram import Bot
 
-from database.db import User
-from database.newsletter import get_id
+from models.models import User
+from services.db_func import get_id
 from services.get_text_horoscope import get_text_horoscope
+from test.test import fetch_horoscope
 
 
 async def send_message_cron(bpt: Bot):
@@ -11,8 +12,8 @@ async def send_message_cron(bpt: Bot):
     :param bpt:
     :return:
     """
-    for id_user, zodiac in get_id(User):
-        text = zodiac + '\n\n' + await get_text_horoscope(zodiac.lower())
+    for id_user, zodiac in await get_id():
+        text = zodiac + '\n\n' + await fetch_horoscope(zodiac.lower())
 
         await bpt.send_message(chat_id=id_user, text=text)
 

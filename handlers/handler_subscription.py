@@ -4,7 +4,7 @@ from aiogram.filters import Command
 
 from keyboards.keyboard_subscription  import get_zodiac_subscription, get_start_keyboard
 from lexicon.lexicon import LEXICON_ZODIAC_SUBSCRIPTIONS
-from database.db import create_user_subscription, user_verification
+from services.db_func import create_user_subscription, user_verification
 
 router: Router = Router()
 
@@ -15,7 +15,8 @@ async def get_subscription(message: Message):
     Обработка команды /subscription, проверяем подписан ли пользователь на рассылку, если нет - выбераем знак
     на который подписываться
     """
-    if user_verification(message.from_user.id):
+    user = await user_verification(message.from_user.id)
+    if user:
         await message.answer(text='Вы уже подписались', reply_markup=get_start_keyboard())
     else:
         await message.answer(text='Подпишитесь на рассылку, выбрав знак или откажитесь выбрав кнопку "Передумать".',
@@ -29,5 +30,5 @@ async def get_period_kb(call: CallbackQuery):
     :param call:
     :return:
     """
-    create_user_subscription(call.from_user.id, call.from_user.first_name, call.data)
+    await create_user_subscription(call.from_user.id, call.from_user.first_name, call.data)
     await call.message.edit_text(text='Вы успешно подписались', reply_markup=get_start_keyboard())
