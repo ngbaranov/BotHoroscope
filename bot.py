@@ -28,7 +28,7 @@ async def main():
     dp = Dispatcher()
     # Рассылка по расписанию
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    scheduler.add_job(send_message_cron, 'cron', hour='08', minute='00', args=[bot])
+    scheduler.add_job(send_message_cron, 'cron', hour='8', minute='00', args=[bot])
     scheduler.start()
     # Подключение роутеров
     dp.include_routers(questions.router, handler_subscription.router, handler_unsubscribe.router, hadler_help.router)

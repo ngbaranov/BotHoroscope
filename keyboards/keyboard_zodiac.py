@@ -8,8 +8,8 @@ def get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS: dict):
     :return:
     """
     keyboard_builder = InlineKeyboardBuilder()
-    for key, value in LEXICON_ZODIAC_SIGNS.items():
-        keyboard_builder.button(text=key, callback_data=value)
+    for name, (slug, emoji) in LEXICON_ZODIAC_SIGNS.items():
+        keyboard_builder.button(text=f'{emoji} {name}', callback_data=slug)
     keyboard_builder.adjust(3)
     return keyboard_builder.as_markup()
 

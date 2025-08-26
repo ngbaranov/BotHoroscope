@@ -2,11 +2,22 @@ import datetime
 
 year = str(datetime.datetime.now().year)
 
-LEXICON_ZODIAC_SIGNS: dict = {'Овен ': 'aries', 'Телец': 'taurus', 'Близнецы': 'gemini', 'Рак': 'cancer', 'Лев': 'leo',
-                              'Дева': 'virgo', 'Весы': 'libra', 'Скорпион': 'scorpio', 'Стрелец': 'sagittarius',
-                              'Козерог': 'capricorn', 'Водолей': 'aquarius', 'Рыба': 'pisces'}
+LEXICON_ZODIAC_SIGNS: dict = {
+    "Овен":      ("aries",       "♈"),
+    "Телец":     ("taurus",      "♉"),
+    "Близнецы":  ("gemini",      "♊"),
+    "Рак":       ("cancer",      "♋"),
+    "Лев":       ("leo",         "♌"),
+    "Дева":      ("virgo",       "♍"),
+    "Весы":      ("libra",       "♎"),
+    "Скорпион":  ("scorpio",     "♏"),
+    "Стрелец":   ("sagittarius", "♐"),
+    "Козерог":   ("capricorn",   "♑"),
+    "Водолей":   ("aquarius",    "♒"),
+    "Рыба":      ("pisces",      "♓"),
+}
 
-LEXICON_ZODIAC_PERIOD: dict = {'Завтра': 'tomorrow', 'Неделя': 'week', 'Месяц': 'month', '2025': '2025'}
+LEXICON_ZODIAC_PERIOD: dict = {'Завтра': 'tomorrow', 'Неделя': 'week', 'Месяц': 'month', '2025': 'year'}
 
 LEXICON_COMMANDS: dict = {'/subscription': 'подписаться', '/unsubscribe': 'отписаться', '/help': 'помощь'}
 

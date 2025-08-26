@@ -14,57 +14,77 @@ from test.test import fetch_horoscope
 router: Router = Router()
 storage: MemoryStorage = MemoryStorage()
 
+# --- helpers ---------------------------------------------------------------
 
-@router.message(CommandStart(),  StateFilter(default_state))
+# Список доступных slug (aries, taurus, ...)
+ZODIAC_SLUGS = [slug for slug, _ in LEXICON_ZODIAC_SIGNS.values()]
 
+# slug -> русское название
+SLUG_TO_NAME = {slug: (name, emoji) for name, (slug, emoji) in LEXICON_ZODIAC_SIGNS.items()}
+
+# period-значения для фильтра (tomorrow, week, month, 2025)
+PERIOD_VALUES = list(LEXICON_ZODIAC_PERIOD.values())
+
+
+@router.message(CommandStart(), StateFilter(default_state))
 async def start_command(message: Message, state: FSMContext):
     """
-    Обработка команды /start,вход в состояние FSMHor, переход к выбору знака зодиака
+    Обработка команды /start: показать клавиатуру выбора знака.
     """
-    await message.answer(text=START,  reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
+    await message.answer(
+        text=START,
+        reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS),
+    )
     await state.set_state(FSMHor.hor_sign)
 
 
-@router.callback_query(F.data.in_(LEXICON_ZODIAC_SIGNS.values()))
+@router.callback_query(F.data.in_(ZODIAC_SLUGS))
 async def get_period_kb(call: CallbackQuery, state: FSMContext):
     """
-    Обработка выбора знака зодиака, гороскоп на сегодня по выбранному знаку вызов клавиатуры с периодами гороскопа
-    :param call:
-    :param state:
-    :return:
+    Обработка выбора знака: показать гороскоп на сегодня + клавиатуру периодов.
     """
     await call.answer()
-    await state.update_data(hor_sign = call.data)
-    zodiac_key = ''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == call.data]) + '\n'
+    await state.update_data(hor_sign=call.data)
+
+    zodiac_name, emoji = SLUG_TO_NAME.get(call.data, ("Знак", ""))
     text = await fetch_horoscope(zodiac_en=call.data)
-    await call.message.edit_text(text=zodiac_key + text, reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
+
+    await call.message.edit_text(
+        text=f"{emoji} {zodiac_name}\n\n{text}",
+        reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD),
+    )
     await state.set_state(FSMHor.hor_time)
 
 
-@router.callback_query(F.data.in_(LEXICON_ZODIAC_PERIOD.values()), FSMHor.hor_time)
+@router.callback_query(F.data.in_(PERIOD_VALUES), FSMHor.hor_time)
 async def get_period(call: CallbackQuery, state: FSMContext):
     """
-    Обработка выбора периода гороскопа, гороскоп по выбранному знаку и периоду
-    :param call:
-    :param state:
-    :return:
+    Обработка выбора периода: показать гороскоп по выбранному знаку и периоду.
     """
     await call.answer()
+
     await state.update_data(hor_time=call.data)
     horoscope = await state.get_data()
-    zodiac_key = (''.join([key for key, value in LEXICON_ZODIAC_SIGNS.items() if value == horoscope['hor_sign']]) +
-                  '\n\n')
-    zodiac_period = ''.join([key for key, value in LEXICON_ZODIAC_PERIOD.items() if value == call.data]) + '\n\n'
-    text = await fetch_horoscope(zodiac_en=horoscope['hor_sign'], period=call.data)
-    await call.message.edit_text(text=zodiac_key + zodiac_period + text,
-                                 reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD))
 
+    slug = horoscope["hor_sign"]
+    zodiac_name, emoji = SLUG_TO_NAME.get(slug, ("Знак", ""))
+    period_name = next((k for k, v in LEXICON_ZODIAC_PERIOD.items() if v == call.data), "")
 
-@router.callback_query(F.data == 'start')
-async def start(call: CallbackQuery):
+    text = await fetch_horoscope(zodiac_en=slug, period=call.data)
+
+    await call.message.edit_text(
+        text=f"{emoji} {zodiac_name}\n\n{period_name}\n\n{text}",
+        reply_markup=kb_zodiac_period(LEXICON_ZODIAC_PERIOD),
+    )
+
+@router.callback_query(F.data == "start")
+async def start(call: CallbackQuery, state: FSMContext):
     """
-    Переход к выбору знака зодиака
+    Возврат к выбору знака зодиака.
     """
-    await call.message.edit_text(text='Выберите знак:',
-                                 reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS))
-
+    await call.answer()
+    await state.set_state(FSMHor.hor_sign)
+    await call.message.edit_text(
+        text="Выберите знак:",
+        reply_markup=get_zodiac_keyboard(LEXICON_ZODIAC_SIGNS),
+    )
