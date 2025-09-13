@@ -26,7 +26,7 @@ SLUG_TO_NAME = {slug: (name, emoji) for name, (slug, emoji) in LEXICON_ZODIAC_SI
 PERIOD_VALUES = list(LEXICON_ZODIAC_PERIOD.values())
 
 
-@router.message(CommandStart(), StateFilter(default_state))
+@router.message(CommandStart())
 async def start_command(message: Message, state: FSMContext):
     """
     Обработка команды /start: показать клавиатуру выбора знака.

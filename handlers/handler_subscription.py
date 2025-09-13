@@ -9,7 +9,7 @@ from services.db_func import create_user_subscription, user_verification
 router: Router = Router()
 
 
-@router.message(Command("subscription"))
+@router.message(Command("subscribe"))
 async def get_subscription(message: Message):
     """
     Обработка команды /subscription, проверяем подписан ли пользователь на рассылку, если нет - выбераем знак
